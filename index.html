@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QUANTO CONSULTING · IA aplicada a Recursos Humanos</title>
+<meta name="description" content="Demo interactiva: ingeniería de prompts e inteligencia artificial aplicada a Recursos Humanos.">
+<link rel="icon" href="assets/logo-q.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F3EE;--ink:#1c1c21;--mute:#5d5d66;--line:#dcd9d0;--y:#FBE94A;--b:#3CB4F0;--p:#A98BF0;--m:#6EE0B8;--card:#fbfaf7;--g:linear-gradient(100deg,var(--y),var(--b) 55%,var(--p));--ok:#1f9d6b;--warn:#c99a00;--bad:#d2453d}
+@media(prefers-color-scheme:dark){:root:not([data-force]){--bg:#F5F3EE}}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 Outfit,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--b);outline-offset:3px}
+.wrap{max-width:1160px;margin:auto;padding:0 28px}
+header{position:sticky;top:0;z-index:20;background:rgba(245,243,238,.88);backdrop-filter:blur(10px);border-bottom:1px solid transparent}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:76px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand img{width:40px;height:40px;object-fit:cover;mix-blend-mode:multiply;border-radius:50%}
+.brand b{font-weight:500;letter-spacing:.34em;font-size:20px;display:block;line-height:1}
+.brand small{letter-spacing:.5em;font-size:9px;color:var(--mute);display:block;margin-top:5px}
+nav{display:flex;gap:30px;font-size:15px}
+nav a{text-decoration:none;padding:4px 0;border-bottom:1.5px solid transparent}
+nav a:hover{border-color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:14px;background:var(--ink);color:#fff;border:0;border-radius:99px;padding:15px 30px;font:500 16px Outfit,sans-serif;text-decoration:none;cursor:pointer;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.hero{position:relative;overflow:hidden;padding:70px 0 120px}
+.hero::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-60px;height:200px;background:var(--g);filter:blur(46px);opacity:.55;border-radius:50%;z-index:0}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:center}
+.kicker{letter-spacing:.3em;font-size:12px;color:var(--mute);text-transform:uppercase}
+h1{font-weight:400;font-size:clamp(36px,5.2vw,62px);line-height:1.08;margin:22px 0 24px;letter-spacing:-.01em}
+.lead{color:var(--mute);max-width:520px;margin-bottom:34px}
+.heroq{display:flex;justify-content:center}
+.heroq img{width:min(430px,100%);mix-blend-mode:multiply;animation:float 7s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-14px) rotate(2deg)}}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:34px;padding:56px 0}
+.pillars div{border-bottom:3px solid var(--c);padding-bottom:22px}
+.pillars i{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--c);font-style:normal;font-size:22px;margin-bottom:16px}
+.pillars h3{font-weight:500;font-size:19px}
+.pillars p{font-size:15px;color:var(--mute)}
+section{padding:90px 0}
+h2{font-weight:400;font-size:clamp(30px,4vw,46px);line-height:1.12;margin-bottom:16px;letter-spacing:-.01em}
+.sub{color:var(--mute);max-width:640px;margin-bottom:44px}
+.demo{background:var(--ink);color:#f3f1ea;border-radius:32px;margin:0 16px;padding:80px 0}
+.demo .sub{color:#b9b8bf}
+.demo .kicker{color:#a9a8b0}
+.company{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:40px}
+.company div{border:1px solid #3a3a42;border-radius:16px;padding:16px}
+.company b{display:block;font-size:30px;font-weight:300;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent}
+.company span{font-size:13px;color:#b9b8bf}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.tab{background:transparent;border:1px solid #484850;color:#e7e5dd;border-radius:99px;padding:9px 18px;font:400 14px Outfit,sans-serif;cursor:pointer}
+.tab[aria-selected=true]{background:var(--g);color:#16161a;border-color:transparent;font-weight:500}
+.panel{display:none;background:#25252b;border-radius:24px;padding:34px;min-height:380px}
+.panel.on{display:block;animation:in .35s}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.panel h3{font-weight:500;font-size:24px;margin-bottom:6px}
+.panel>p{color:#b9b8bf;margin-bottom:22px}
+.seg{display:inline-flex;background:#17171b;border-radius:99px;padding:4px;margin-bottom:18px}
+.seg button{border:0;background:none;color:#cfcdc5;padding:8px 18px;border-radius:99px;font:400 14px Outfit,sans-serif;cursor:pointer}
+.seg button.on{background:#f3f1ea;color:#16161a}
+.box{background:#17171b;border-radius:16px;padding:20px 22px;font-size:15.5px;line-height:1.65;color:#e7e5dd}
+.box.mono{border-left:3px solid var(--b)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tag{display:inline-block;font-size:12px;padding:3px 11px;border-radius:99px;margin-bottom:10px;background:#34343c;color:#d8d6ce}
+.verdict{margin-top:18px;font-weight:500}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{text-align:left;padding:11px 12px;border-bottom:1px solid #3a3a42;vertical-align:top}
+th{font-weight:500;color:#a9a8b0;font-size:13px}
+td:first-child{font-weight:500;white-space:nowrap}
+.stmt{display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%;text-align:left;background:#17171b;color:#e7e5dd;border:1px solid #3a3a42;border-radius:14px;padding:14px 18px;margin-bottom:10px;font:400 15.5px Outfit,sans-serif;cursor:pointer}
+.stmt .st{flex:none;font-size:13px;padding:4px 12px;border-radius:99px;background:#34343c}
+.stmt[data-s="1"] .st{background:var(--ok);color:#fff}.stmt[data-s="2"] .st{background:var(--warn);color:#16161a}.stmt[data-s="3"] .st{background:var(--bad);color:#fff}
+.stmt.right{border-color:var(--ok)}.stmt.wrong{border-color:var(--bad)}
+.bars{display:grid;gap:12px;margin:6px 0 18px}
+.bar{display:grid;grid-template-columns:120px 1fr 56px;align-items:center;gap:12px;font-size:14px}
+.bar i{display:block;height:14px;border-radius:8px;background:#34343c;overflow:hidden}
+.bar i s{display:block;height:100%;width:0;background:var(--g);transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.bar.hot s{background:linear-gradient(90deg,var(--y),var(--bad))}
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:22px}
+.node{padding:12px 16px;border-radius:14px;background:#17171b;border:1px solid #3a3a42;font-size:14.5px;opacity:.45;transition:.3s}
+.node.on{opacity:1;border-color:var(--m);box-shadow:0 0 0 3px rgba(110,224,184,.2)}
+.node.human{border-style:dashed}
+.arrow{color:#6a6a74}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.rules div{background:#17171b;border-radius:12px;padding:12px 16px;font-size:15px}
+.rules div::before{content:"✓ ";color:var(--m)}
+.phases{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
+.phase{padding:30px 26px 10px 0}
+.phase+.phase{padding-left:26px;border-left:1px solid var(--line)}
+.phase em{font-style:normal;font-size:13px;color:var(--mute)}
+.phase h3{font-weight:500;font-size:21px;margin:6px 0 12px}
+.phase li{font-size:15px;color:var(--mute);margin:0 0 7px 18px}
+.phase:nth-child(1) h3{border-bottom:3px solid var(--y)}.phase:nth-child(2) h3{border-bottom:3px solid var(--p)}.phase:nth-child(3) h3{border-bottom:3px solid var(--b)}.phase:nth-child(4) h3{border-bottom:3px solid var(--m)}
+.seq{display:flex;flex-wrap:wrap;gap:10px;margin:50px 0 10px}
+.seq span{padding:10px 20px;border-radius:99px;border:1.5px solid var(--ink);font-size:15px}
+.kit{columns:3;column-gap:40px;font-size:15.5px;color:var(--mute);margin-top:34px}
+.kit li{margin:0 0 8px 18px}
+.cta{text-align:center;padding:110px 0 70px}
+.cta h2{max-width:760px;margin:0 auto 18px}
+footer{padding:30px 0 50px;font-size:14px;color:var(--mute);border-top:1px solid var(--line)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:900px){.hero .wrap,.two,.rules{grid-template-columns:1fr}.pillars,.phases{grid-template-columns:1fr 1fr}.company{grid-template-columns:repeat(2,1fr)}.kit{columns:1}nav{display:none}.panel{padding:22px}.phase+.phase{border-left:0;padding-left:0}.phase{padding-right:12px}.heroq{order:-1}}
+@media(max-width:560px){.pillars,.phases{grid-template-columns:1fr}.bar{grid-template-columns:90px 1fr 50px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="brand" href="#inicio" aria-label="QUANTO CONSULTING"><img src="assets/logo-q.jpg" alt=""><span><b>QUANTO</b><small>CONSULTING</small></span></a>
+  <nav><a href="#inicio">Inicio</a><a href="#demo">Demo</a><a href="#programa">Programa</a><a href="#contacto">Contacto</a></nav>
+</div></header>
+
+<main id="inicio">
+<div class="hero"><div class="wrap">
+  <div>
+    <p class="kicker">Talento + Bienestar + Tecnología = Futuro</p>
+    <h1>Personas, tecnología y estrategia para construir organizaciones de alto impacto.</h1>
+    <p class="lead">En QUANTO CONSULTING combinamos la ciencia del comportamiento humano con la innovación tecnológica para potenciar el talento, la cultura y el rendimiento de las organizaciones.</p>
+    <a class="btn" href="#demo">Ver la demo en vivo <span aria-hidden="true">→</span></a>
+  </div>
+  <div class="heroq"><img src="assets/logo-q.jpg" alt="Logotipo Q de QUANTO CONSULTING"></div>
+</div></div>
+
+<div class="wrap pillars">
+  <div style="--c:#FBF0A8"><i>👥</i><h3>Talento humano</h3><p>Atraemos, desarrollamos y potenciamos el talento que hace crecer a tu organización.</p></div>
+  <div style="--c:#DCCDF8"><i>🧠</i><h3>Psicología organizacional</h3><p>Fortalecemos la cultura, el liderazgo y el bienestar de equipos de alto rendimiento.</p></div>
+  <div style="--c:#B9E3F8"><i>⚙️</i><h3>Tecnología</h3><p>Integramos soluciones digitales para optimizar procesos y potenciar tu talento.</p></div>
+  <div style="--c:#BDEFDC"><i>✨</i><h3>Inteligencia artificial</h3><p>Aplicamos IA para tomar mejores decisiones, impulsar la innovación y crear valor sostenible.</p></div>
+</div>
+
+<section class="demo" id="demo"><div class="wrap">
+  <p class="kicker">Demo · 20–30 minutos</p>
+  <h2>Un día de RRHH con IA</h2>
+  <p class="sub">Hoy no vemos 20 prompts. Resolvemos un problema real de Recursos Humanos, de principio a fin, con un solo caso empresarial.</p>
+  <div class="company" aria-label="Caso VegaTech Colombia (ficticio)">
+    <div><b>250</b><span>empleados en VegaTech Colombia</span></div>
+    <div><b>80</b><span>personas en el área comercial</span></div>
+    <div><b>12→19%</b><span>rotación en seis meses</span></div>
+    <div><b>120</b><span>hojas de vida para una vacante</span></div>
+    <div><b>1</b><span>encuesta de clima en Excel</span></div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-t="0">1 · Prompt básico vs. profesional</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="1">2 · COSTAR</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="2">3 · Atrapa la alucinación</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="3">4 · Subimos un Excel</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="4">5 · Del dato a la decisión</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="5">6 · Prompt → workflow</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="6">7 · HR Copilot</button>
+  </div>
+
+  <div class="panel on" role="tabpanel">
+    <h3>¿Se lo entregarías así a un gerente?</h3>
+    <p>Las 3C: Claridad (qué necesito), Contexto (qué debe saber la IA), Control (cómo quiero el resultado).</p>
+    <div class="seg"><button class="on" data-p="b">Prompt básico</button><button data-p="c">Prompt con 3C</button></div>
+    <div class="two">
+      <div><span class="tag">Prompt</span><div class="box mono" id="p1"></div></div>
+      <div><span class="tag">Respuesta de la IA</span><div class="box" id="r1"></div></div>
+    </div>
+    <p class="verdict" id="v1"></p>
+  </div>
+
+  <div class="panel" role="tabpanel">
+    <h3>Diseñar instrucciones, no solo preguntar</h3>
+    <p>Marca cada elemento de COSTAR para armar el prompt.</p>
+    <div class="two">
+      <table id="costar"></table>
+      <div><span class="tag">Prompt generado</span><div class="box mono" id="pc" style="min-height:200px"></div></div>
+    </div>
+  </div>
+
+  <div class="panel" role="tabpanel">
+    <h3>Dato, inferencia o información no disponible</h3>
+    <p>Prompt: «Analiza las causas de la rotación de nuestra empresa». Datos entregados: 250 empleados, rotación de 12% a 19%, especialmente en el área comercial. Toca cada afirmación para clasificarla.</p>
+    <div id="stm"></div>
+    <button class="btn" style="background:var(--g);color:#16161a;margin-top:8px" id="chk">Verificar clasificación</button>
+    <p class="verdict" id="v3"></p>
+  </div>
+
+  <div class="panel" role="tabpanel">
+    <h3>IA + datos + RRHH (datos ficticios)</h3>
+    <p>Columnas: área, cargo, antigüedad, salario, ausentismo, desempeño, satisfacción, horas extra, renunció.</p>
+    <div class="seg" id="sg4"><button class="on" data-k="rot">Rotación por área</button><button data-k="ot">Horas extra al mes</button><button data-k="sat">Satisfacción (0–10)</button></div>
+    <div class="bars" id="bars"></div>
+    <button class="btn" style="background:var(--g);color:#16161a" id="an">Detectar patrones y anomalías</button>
+    <div class="box" id="pat" style="margin-top:16px;display:none"></div>
+  </div>
+
+  <div class="panel" role="tabpanel">
+    <h3>Resumen ejecutivo para la Dirección de RRHH</h3>
+    <p>Prompt: «Con base exclusivamente en los datos disponibles, prepara un resumen ejecutivo».</p>
+    <div class="two">
+      <div class="box"><b>Hallazgos</b><br>1. Comercial tiene rotación de 32%, el doble del promedio.<br>2. Comercial duplica las horas extra del resto de áreas.<br>3. La satisfacción baja donde sube la carga.<br><br><b>Hipótesis</b><br>Sobrecarga y liderazgo comercial podrían explicar parte de las salidas.</div>
+      <div class="box"><b>Recomendaciones</b><br>Entrevistas de salida del área comercial. Revisar metas y carga. Pilotar un plan de liderazgo.<br><br><b>Información que falta</b><br>Compensación frente al mercado, motivos de renuncia y datos por jefe directo.</div>
+    </div>
+    <p class="verdict">¿La IA tomó la decisión? No. Convirtió datos en información para que el profesional decida mejor.</p>
+  </div>
+
+  <div class="panel" role="tabpanel">
+    <h3>Un solo prompt es una tarea. Un workflow son varias conectadas.</h3>
+    <p>Herramientas posibles: Zapier, Make, formularios, hojas de cálculo, correo, ATS y GPT por API.</p>
+    <div class="flow" id="flow"></div>
+    <button class="btn" style="background:var(--g);color:#16161a" id="run">Ejecutar workflow</button>
+    <p class="verdict" id="v6" style="font-weight:400;color:#b9b8bf"></p>
+  </div>
+
+  <div class="panel" role="tabpanel">
+    <h3>HR Copilot: dejar de usar la IA solo como chatbot</h3>
+    <p>Un asistente con rol, funciones y reglas claras. Ayuda en selección, capacitación, bienestar, análisis, comunicación y problemáticas laborales.</p>
+    <div class="rules">
+      <div>No inventa información</div><div>Diferencia datos de hipótesis</div>
+      <div>Solicita la información que falta</div><div>Usa lenguaje profesional</div>
+      <div>Protege información sensible</div><div>No toma decisiones automatizadas de alto impacto</div>
+      <div>Presenta alternativas</div><div>Explica los criterios que utilizó</div>
+    </div>
+    <p class="verdict">Problema de RRHH → prompt estructurado → datos → análisis → workflow → asistente → decisión humana mejor informada.</p>
+  </div>
+</div></section>
+
+<section id="programa"><div class="wrap">
+  <p class="kicker">Programa</p>
+  <h2>De usuario de IA a diseñador de soluciones para RRHH</h2>
+  <p class="sub">Capacitación teórico-práctica: 30% concepto y 70% práctica, con casos reales de Gestión Humana.</p>
+  <div class="phases">
+    <div class="phase"><em>Fase 1</em><h3>Fundamentos y prompts</h3><ul><li>IA, LLM y alucinaciones</li><li>Las 3C del prompting</li><li>Few-shot, roles, STORM</li><li>COSTAR y REACT</li><li>Instrucciones personalizadas</li></ul></div>
+    <div class="phase"><em>Fase 2</em><h3>Automatización y workflows</h3><ul><li>Del prompt al workflow</li><li>Automatización parcial y total</li><li>Zapier, Make e IFTTT</li><li>Asistentes especializados</li><li>Matriz de ROI de la IA</li></ul></div>
+    <div class="phase"><em>Fase 3</em><h3>Análisis de datos</h3><ul><li>Excel y CSV con ChatGPT</li><li>People Analytics</li><li>Patrones, anomalías e hipótesis</li><li>Visualización</li><li>Informes ejecutivos</li></ul></div>
+    <div class="phase"><em>Fase 4</em><h3>IA avanzada</h3><ul><li>Imágenes e interpretación</li><li>Herramientas avanzadas de GPT</li><li>Diseño de asistentes</li><li>Reto y proyecto final</li></ul></div>
+  </div>
+  <div class="seq" aria-label="Secuencia de cada módulo"><span>Concepto</span><span>Demostración</span><span>Prompt</span><span>Ejercicio</span><span>Caso RRHH</span><span>Reto</span></div>
+  <p class="sub" style="margin:14px 0 0">Regla de oro: en RRHH no se automatizan por completo las decisiones de contratación, despido o sanciones. Se exige trazabilidad y revisión humana.</p>
+  <ul class="kit">
+    <li>Manual de ingeniería de prompts para RRHH</li><li>Guía de las 3C</li><li>Plantillas COSTAR, REACT y STORM</li><li>Biblioteca de prompts: selección, entrevistas, bienestar, capacitación y People Analytics</li><li>Plantillas de workflows</li><li>Plantilla de asistente especializado</li><li>Matriz de productividad y ROI</li><li>Caso práctico final</li>
+  </ul>
+</div></section>
+
+<section class="cta" id="contacto"><div class="wrap">
+  <h2>Aprende a diseñar, optimizar y automatizar procesos de Recursos Humanos con IA.</h2>
+  <p class="sub" style="margin:0 auto 34px">Agenda una demo para tu organización. Reemplaza el correo de abajo por el tuyo.</p>
+  <a class="btn" href="mailto:contacto@tudominio.com">Conversemos <span aria-hidden="true">→</span></a>
+</div></section>
+</main>
+
+<footer><div class="wrap"><span>© <span id="yr"></span> QUANTO CONSULTING S.A.S.</span><span>Conocimiento humano · Innovación real</span></div></footer>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+$('#yr').textContent=new Date().getFullYear();
+/* Tabs */
+const tabs=$$('.tab'),panels=$$('.panel');
+tabs.forEach(t=>t.onclick=()=>{tabs.forEach(x=>x.setAttribute('aria-selected',x===t));panels.forEach((p,i)=>p.classList.toggle('on',i==t.dataset.t))});
+/* 1 · 3C */
+const P1={b:['«Analiza este problema de rotación.»','Respuesta genérica: «La rotación puede deberse a salarios, clima laboral, liderazgo o falta de oportunidades. Se recomienda mejorar la comunicación y ofrecer beneficios».','No es entregable: no hay hipótesis verificables ni indicadores.'],
+c:['«Actúa como consultor de RRHH especializado en retención. Una empresa tecnológica de 250 empleados pasó de 12% a 19% de rotación en seis meses, sobre todo en el área comercial. Analiza causas organizacionales, formula hipótesis verificables con datos y propone un plan de investigación. No asumas información no proporcionada. Responde en una tabla: hipótesis, evidencia necesaria, indicador y posible acción».','<b>Tabla de hipótesis</b><br>• Sobrecarga comercial → horas extra, ausentismo → revisar metas.<br>• Liderazgo → satisfacción por jefe → plan de acompañamiento.<br>• Compensación → brecha salarial → benchmark.<br><i>Aclara qué datos faltan antes de concluir.</i>','Ahora sí: se puede llevar a una reunión de gerencia.']};
+function s1(k){$('#p1').innerHTML=P1[k][0];$('#r1').innerHTML=P1[k][1];$('#v1').textContent=P1[k][2]}
+$$('.seg button[data-p]').forEach(b=>b.onclick=()=>{$$('.seg button[data-p]').forEach(x=>x.classList.toggle('on',x===b));s1(b.dataset.p)});s1('b');
+/* 2 · COSTAR */
+const C=[['Contexto','Empresa tecnológica de 250 empleados.'],['Objetivo','Reducir la rotación.'],['Situación','La rotación subió de 12% a 19%.'],['Tarea','Identificar las causas probables.'],['Acciones','Proponer alternativas de intervención.'],['Resultado','Un plan de intervención priorizado.']];
+$('#costar').innerHTML='<tr><th>Elemento</th><th>Aplicación</th></tr>'+C.map((c,i)=>`<tr><td><label><input type="checkbox" data-i="${i}"> ${c[0]}</label></td><td>${c[1]}</td></tr>`).join('');
+function pc(){const on=$$('#costar input:checked').map(x=>C[x.dataset.i]);$('#pc').innerHTML=on.length?on.map(c=>`<b>${c[0]}:</b> ${c[1]}`).join('<br>'):'Marca los elementos para construir el prompt.'}
+$$('#costar input').forEach(i=>i.onchange=pc);pc();
+/* 3 · Alucinaciones */
+const S=[['La rotación subió de 12% a 19%.',1],['Probablemente hay problemas de liderazgo.',2],['Los salarios están por debajo del mercado.',3],['Las metas comerciales generan sobrecarga.',2],['El 60% de las renuncias fue por una mejor oferta salarial.',3]],L=['Sin clasificar','🟢 Dato','🟡 Inferencia','🔴 No disponible'];
+$('#stm').innerHTML=S.map((s,i)=>`<button class="stmt" data-s="0" data-i="${i}"><span>${s[0]}</span><span class="st">${L[0]}</span></button>`).join('');
+$$('.stmt').forEach(b=>b.onclick=()=>{const n=(+b.dataset.s+1)%4;b.dataset.s=n;b.className='stmt';b.dataset.s=n;$('.st',b).textContent=L[n]});
+$('#chk').onclick=()=>{let ok=0;$$('.stmt').forEach(b=>{const r=S[b.dataset.i][1]==b.dataset.s;ok+=r;b.classList.add(r?'right':'wrong')});$('#v3').textContent=ok+' de 5 correctas. La competencia clave no es obtener respuestas bonitas: es saber cuándo la IA está inventando.'};
+/* 4 · Excel */
+const D=[['Comercial',32,34,5.8],['Tecnología',14,14,7.4],['Operaciones',14,18,7.1],['Administrativo',10,8,7.8],['Fin. y RRHH',10,6,8.1]],M={rot:[1,'%',40],ot:[2,' h',40],sat:[3,'',10]};
+function bars(k){const [c,u,mx]=M[k];$('#bars').innerHTML=D.map(d=>`<div class="bar${k=='rot'&&d[0]=='Comercial'||k=='ot'&&d[0]=='Comercial'?' hot':''}"><span>${d[0]}</span><i><s data-w="${d[c]/mx*100}"></s></i><span>${d[c]}${u}</span></div>`).join('');requestAnimationFrame(()=>requestAnimationFrame(()=>$$('#bars s').forEach(s=>s.style.width=s.dataset.w+'%')))}
+$$('#sg4 button').forEach(b=>b.onclick=()=>{$$('#sg4 button').forEach(x=>x.classList.toggle('on',x===b));bars(b.dataset.k)});bars('rot');
+$('#an').onclick=()=>{const p=$('#pat');p.style.display='block';p.innerHTML='<b>Patrón:</b> Comercial concentra más rotación, más horas extra y menor satisfacción.<br><b>Anomalía:</b> Tecnología rota 14% con satisfacción alta. Hay otro factor que investigar.<br><b>Recordatorio:</b> datos ≠ explicación. Patrón → hipótesis → validación.'};
+/* 6 · Workflow */
+const F=[['📄 CV recibido'],['🔎 Extraer información'],['⚖️ Comparar requisitos'],['🏷️ Clasificar candidato'],['📝 Generar resumen'],['👤 Revisión del reclutador',1],['🗂️ Registrar en el ATS']];
+$('#flow').innerHTML=F.map((f,i)=>`<span class="node${f[1]?' human':''}">${f[0]}</span>${i<F.length-1?'<span class="arrow">→</span>':''}`).join('');
+$('#run').onclick=()=>{const n=$$('.node');n.forEach(x=>x.classList.remove('on'));$('#v6').textContent='';n.forEach((x,i)=>setTimeout(()=>{x.classList.add('on');if(i==n.length-1)$('#v6').textContent='La IA propone, una persona decide y el sistema deja trazabilidad.'},i*600))};
+</script>
+</body>
+</html>
